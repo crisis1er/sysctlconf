@@ -8,6 +8,10 @@
 
 Production-ready custom sysctl configuration for **openSUSE Tumbleweed** — tuned for desktop multimedia, fibre broadband, KVM virtualization, and a hardened privacy-first network stack (Squid + Unbound).
 
+Every parameter is commented with the reason it was changed from the kernel default. Deployed and validated on a live system — not a copy-paste collection.
+
+> **Drop-in design** — placed in `/etc/sysctl.d/99-custom.conf`, it loads last and overrides all distribution defaults without touching any system-managed file. Update-safe, instantly reversible.
+
 ---
 
 ## Why a drop-in file instead of editing sysctl.conf?
