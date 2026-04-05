@@ -1,6 +1,39 @@
-# RELEASE
+# RELEASE — sysctl-tumbleweed-config
 
-Version: v1.0
-Date:    2026-04-05
+Version:  v1.0
+Date:     2026-04-04
+Platform: openSUSE Tumbleweed
+File:     /etc/sysctl.d/99-custom.conf
 
-See CHANGELOG.md for details.
+---
+
+## What's in this release
+
+### Drop-in design
+Single file `99-custom.conf` deployed to `/etc/sysctl.d/` — overrides system defaults
+without modifying vendor files. Survives OS updates.
+
+### Memory management
+- `vm.swappiness=10` — minimize swap, prefer RAM
+- `vm.dirty_ratio=15`, `vm.dirty_background_ratio=5` — controlled writeback for USB SSD
+- `vm.dirty_writeback_centisecs=1500` — batched writeback, reduces SSD write cycles
+
+### Network stack
+- `net.core.rmem_max` / `wmem_max` — enlarged socket buffers for streaming and proxy
+- `net.core.netdev_max_backlog=5000` — handles burst traffic from KVM + Squid
+- SYN flood protection: `tcp_syncookies=1`, `tcp_max_syn_backlog=2048`
+- `tcp_fin_timeout=15` — faster connection teardown under Squid load
+
+### Security hardening
+- `kernel.dmesg_restrict=1` — non-root users cannot read kernel ring buffer
+- `kernel.kptr_restrict=2` — hides kernel pointers from all users
+- `net.ipv4.conf.all.rp_filter=1` — reverse path filtering, anti-spoofing
+- `net.ipv4.conf.all.accept_redirects=0` — ignores ICMP redirects
+
+### KVM / virtualization
+- `net.ipv4.ip_forward=1` — required for KVM bridge and VM routing
+- `net.ipv6.conf.all.forwarding=1` — IPv6 forwarding for VMs
+- `net.netfilter.nf_conntrack_max=131072` — extended conntrack table for Squid + KVM
+
+### System
+- `fs.inotify.max_user_watches=524288` — required for KDE and monitoring stack (Prometheus, Loki)
