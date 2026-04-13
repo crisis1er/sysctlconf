@@ -121,6 +121,8 @@ Full dual-stack support with the same security hardening as IPv4: redirects and 
 | `yama.ptrace_scope` | 1 | Restricts ptrace to parent processes — mitigates local privilege escalation |
 | `kernel.sysrq` | 244 | Selective SysRq: SAK + sync + remount-ro + reboot — excludes raw memory dump |
 | `kernel.panic` | 10 | Auto-reboot 10s after kernel panic |
+| `kernel.core_uses_pid` | 1 | Appends PID to core dump filename — prevents overwrites on concurrent crashes |
+| `fs.suid_dumpable` | 0 | Disables core dumps for setuid processes — reduces attack surface (Lynis KRNL-6000) |
 
 ### 8 — Filesystem — inotify
 
@@ -195,6 +197,20 @@ To restore system defaults, remove the file and reload:
 ```bash
 sudo rm /etc/sysctl.d/99-custom.conf
 sudo sysctl --system
+```
+
+---
+
+## Lynis audit
+
+This configuration is validated against [Lynis](https://cisofy.com/lynis/). After running an audit, filter results with:
+
+```bash
+# Suggestions only
+grep Suggestion /var/log/lynis.log
+
+# Warnings only
+grep Warning /var/log/lynis.log
 ```
 
 ---
