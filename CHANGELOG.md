@@ -4,6 +4,14 @@ All notable changes to this configuration are documented here.
 
 ---
 
+## [1.1] — 2026-04-13
+
+### Added
+- `kernel.core_uses_pid = 1` — append PID to core dump filenames (Lynis KRNL-6000)
+- `fs.suid_dumpable = 0` — disable core dumps for setuid processes (Lynis KRNL-6000)
+
+---
+
 ## [1.0] — 2026-04-04
 
 ### Added
